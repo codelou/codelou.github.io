@@ -257,6 +257,235 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/19/js里常见的一些遍历方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="codelou's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/19/js里常见的一些遍历方法/" itemprop="url">
+                  js里常见的一些遍历方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-19T09:21:19+08:00">
+                2017-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="js遍历方法归纳"><a href="#js遍历方法归纳" class="headerlink" title="js遍历方法归纳"></a>js遍历方法归纳</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h4 id="每种语言都有自己的遍历方法，每种语言都有好几种不同的遍历方法，今天我就将js中常见的遍历方法拿出来归纳一下，也方便自己的记忆。ps-今天之后不要说自己只会for循环了"><a href="#每种语言都有自己的遍历方法，每种语言都有好几种不同的遍历方法，今天我就将js中常见的遍历方法拿出来归纳一下，也方便自己的记忆。ps-今天之后不要说自己只会for循环了" class="headerlink" title="每种语言都有自己的遍历方法，每种语言都有好几种不同的遍历方法，今天我就将js中常见的遍历方法拿出来归纳一下，也方便自己的记忆。ps:今天之后不要说自己只会for循环了."></a>每种语言都有自己的遍历方法，每种语言都有好几种不同的遍历方法，今天我就将js中常见的遍历方法拿出来归纳一下，也方便自己的记忆。ps:今天之后不要说自己只会for循环了.</h4><h4 id="首先我们定义一个数组"><a href="#首先我们定义一个数组" class="headerlink" title="首先我们定义一个数组:"></a>首先我们定义一个数组:</h4><p> var arr =[‘1’,’test’,2,true,’123dfg’];</p>
+<hr>
+<ol>
+<li>for循环，需要知道数组的长度，才能遍历。(这个我就不多说了)</li>
+<li>forEach循环,循环数组中的每个元素来采取操作，没有返回值，可以不用知道数组的长度</li>
+</ol>
+<hr>
+<pre><code>var arr =[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;];
+arr.forEach(function(i,index){
+    i= i+&apos;,hi&apos;;
+    console.log(i);
+});
+1,hi 
+test,hi
+2,hi
+true,hi,
+123dfg,hi
+</code></pre><ol>
+<li>map函数，遍历数组每个元素，并回调操作，需要返回值，返回值组成新的数组，原数组不变。</li>
+</ol>
+<hr>
+<pre><code>var arr=[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;];
+var tt = arr.map((i) =&gt; {
+  i = i+&apos;,hi2&apos;;
+  return i;
+});
+console.log(arr,tt);
+[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;]
+[&apos;1,hi2&apos;,&apos;test,hi2&apos;,&apos;2,hi2&apos;,&apos;true,hi2&apos;,&apos;123dfg,hi2&apos;]
+</code></pre><hr>
+<ol>
+<li>filter函数, 过滤通过条件的元素组成新的数组，原数组不变</li>
+</ol>
+<hr>
+<pre><code>var arr =[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;];
+var tt = arr.filter((i) =&gt; {
+ return typeof i ==&apos;number&apos;;
+});
+console.log(arr,tt);
+[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;]
+[ 2 ]
+</code></pre><hr>
+<ol>
+<li>some 函数，遍历数组中是否有符合条件的元素，返回    Boolean值</li>
+</ol>
+<hr>
+<pre><code>var arr = [&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;];
+var tt = arr.some((i)=&gt;{
+return typeof i ==&apos;number&apos;;
+
+});
+console.log(arr,tt);
+[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;] true
+</code></pre><hr>
+<ol>
+<li>every 函数,遍历数组中是否每个元素都符合条件,返回Boolean值<br>var arr = [‘1’,’test’,2,true,’123dfg’];<br>var tt = arr.every((i) =&gt;{<br>return typeof i ==’number’;<br>});<br>console.log(arr,tt);<br>[‘1’,’test’,2,true,’123dfg’]; false    </li>
+</ol>
+<hr>
+<p>当然除了遍历数组之外，还有遍历对象,常见方法in</p>
+<hr>
+<pre><code>var obj= {a:&apos;test&apos;,b:1,c:true};
+for(var i in obj){
+ console.log(i,obj[i]);
+}
+console.log(obj);
+a test
+b 1
+c true
+{a:&apos;test&apos;,b:1,c:true}
+</code></pre><p>in 不仅可以用来遍历对象, 还可以用来遍历数组,不过i 对应与数组的key值</p>
+<hr>
+<pre><code>var arr =[&apos;1&apos;,&apos;test&apos;,2,true,&apos;123dfg&apos;];
+for(var i in arr){
+   console.log(i,arr[i]);
+}     
+console.log(arr,tt);
+</code></pre><hr>
+<p>介绍完遍历,下面说一下工作中遇到的情况,后台传给我一个对象数组，我需要排序再显示，看到有介绍用sort排序的方法,如下       </p>
+<hr>
+<pre><code>var arr1 = [
+{name: &apos;te&apos;, value: 5},
+{name: &apos;te&apos;, value: 2},
+{name: &apos;we&apos;, value: 3},
+{name: &apos;ee&apos;, value: 1},
+{name: &apos;ee&apos;, value: 4}
+ ];
+
+var by = function(type){
+return function(o,p){
+    console.log(o,p);
+    var a;
+    var b;
+    if(typeof o === &apos;object&apos; &amp;&amp; typeof p === &apos;object&apos; &amp;&amp; o &amp;&amp; p){
+        a = o[type];
+        b = p[type];
+        if(a === b) {
+            return 0;
+        }
+        if(typeof a === typeof b){
+        console.log(a, b);
+            return a &lt; b ? -1 : 1
+        }
+        return typeof a &lt; typeof b ? -1 : 1;
+    }else {
+        throw(&apos;字段有误&apos;);
+    }
+}
+}
+  console.log(arr1.sort(by(&apos;value&apos;)));
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/10/bat前端面试题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -880,7 +1109,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
