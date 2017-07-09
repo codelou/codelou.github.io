@@ -1,0 +1,702 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端爱好者" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="MVVM 设计模式前言相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mvvm 设计模式">
+<meta property="og:url" content="http://yoursite.com/2017/07/07/mvvm-设计模式/index.html">
+<meta property="og:site_name" content="codelou's Blog">
+<meta property="og:description" content="MVVM 设计模式前言相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，">
+<meta property="og:updated_time" content="2017-07-09T12:38:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mvvm 设计模式">
+<meta name="twitter:description" content="MVVM 设计模式前言相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/07/mvvm-设计模式/"/>
+
+
+
+
+
+  <title> mvvm 设计模式 | codelou's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?84b858f0da9ee8b6361ba81d4a50ad7a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">codelou's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/mvvm-设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="codelou's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mvvm 设计模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T16:37:27+08:00">
+                2017-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MVVM-设计模式"><a href="#MVVM-设计模式" class="headerlink" title="MVVM 设计模式"></a>MVVM 设计模式</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h4 id="相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端-这里只讨论前端-技术不断发展衍生出来的，这里我们这种介绍mvvm。"><a href="#相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端-这里只讨论前端-技术不断发展衍生出来的，这里我们这种介绍mvvm。" class="headerlink" title="相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。"></a>相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。</h4><h4 id="MVVM-是Model-View-ViewModel的缩写-是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。"><a href="#MVVM-是Model-View-ViewModel的缩写-是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。" class="headerlink" title="MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。"></a>MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。</h4><h4 id="vue-js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM-也就是viewModel-viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷"><a href="#vue-js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM-也就是viewModel-viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷" class="headerlink" title="vue.js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM,也就是viewModel,viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷."></a>vue.js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM,也就是viewModel,viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷.</h4><h3 id="1、为什么会出现MVVM"><a href="#1、为什么会出现MVVM" class="headerlink" title="1、为什么会出现MVVM?"></a>1、为什么会出现MVVM?</h3><h4 id="其实MVVM的兴起也正是不久前的15年，也正是vue-js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。"><a href="#其实MVVM的兴起也正是不久前的15年，也正是vue-js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。" class="headerlink" title="其实MVVM的兴起也正是不久前的15年，也正是vue.js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。"></a>其实MVVM的兴起也正是不久前的15年，也正是vue.js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。</h4><hr>
+<ul>
+<li>View 讲controller返回过来的数据展示给用户</li>
+<li>Model 负责提供后端的数据，说白了就是数据库里的各种表</li>
+<li>Controller 负责接收View的操作，对Model里的数据进行一顿操作，中间可能会进行 各种逻辑操作，最后再将操作后的model数据传给View层，展示给用户。</li>
+</ul>
+<h4 id="在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的瘦客户端思想。"><a href="#在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的瘦客户端思想。" class="headerlink" title="在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的瘦客户端思想。"></a>在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的<em>瘦客户端</em>思想。</h4><p>####但随着前端需求的不断提高，越来越多的技术接踵而来，要求高了，那前端的位子也变得更加重要，内容也变得更加丰满，因此前后端分离也成为了不可避免的一步，于是前端采用MVC架构，作为一个独立的工程项目来进行维护。</p>
+<h3 id="2-前端为何要工程化，用使用MVC？"><a href="#2-前端为何要工程化，用使用MVC？" class="headerlink" title="2.前端为何要工程化，用使用MVC？"></a>2.前端为何要工程化，用使用MVC？</h3><h4 id="相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App-既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化："><a href="#相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App-既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化：" class="headerlink" title="相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App.既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化："></a>相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App.既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化：</h4><ul>
+<li>View Ui布局，展示数据。</li>
+<li>Modal 管理数据</li>
+<li>Controller 响应用户操作,并将Model更新到View上</li>
+</ul>
+<h4 id="这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点："><a href="#这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点：" class="headerlink" title="这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点："></a>这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点：</h4><ul>
+<li>开发者再代码中大量调用相同的DOM API，处理繁琐，操作冗余，是的代码难以维护</li>
+<li>大量的DOM操作使页面渲染性能降低，加载速度变慢，影响用户体验</li>
+<li>当Model频繁发生变化，开发者需要主动更新到View；当用户的操作导致Model发生变化，开发者同样需要将变化的数据同步到Model中，这样的工作环境不仅繁琐，而且很难维护复杂多变的数据状态。<h4 id="其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。"><a href="#其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。" class="headerlink" title="其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。"></a>其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。</h4></li>
+</ul>
+<h3 id="3-MVVM-的出现，完美解决以上三个问题"><a href="#3-MVVM-的出现，完美解决以上三个问题" class="headerlink" title="3.MVVM 的出现，完美解决以上三个问题"></a>3.MVVM 的出现，完美解决以上三个问题</h3><h4 id="MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。"><a href="#MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。" class="headerlink" title="MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。"></a>MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。</h4><h4 id="在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。"><a href="#在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。" class="headerlink" title="在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。"></a>在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。</h4><h4 id="ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有-由MVVM来统一管理。"><a href="#ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有-由MVVM来统一管理。" class="headerlink" title="ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有 由MVVM来统一管理。"></a>ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有 由MVVM来统一管理。</h4><h3 id="4-Vue-js的细节"><a href="#4-Vue-js的细节" class="headerlink" title="4.Vue.js的细节"></a>4.Vue.js的细节</h3><h4 id="Vue-js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。"><a href="#Vue-js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。" class="headerlink" title="Vue.js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。"></a>Vue.js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。</h4><h4 id="Vue-js是采用Object-defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object-defineProperty将它们转化为getter-setter。用户看不到getter-setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。"><a href="#Vue-js是采用Object-defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object-defineProperty将它们转化为getter-setter。用户看不到getter-setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。" class="headerlink" title="Vue.js是采用Object.defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object.defineProperty将它们转化为getter/setter。用户看不到getter/setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。"></a>Vue.js是采用Object.defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object.defineProperty将它们转化为getter/setter。用户看不到getter/setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。</h4><ul>
+<li><p>Observer 数据监听器，能够对数据对象的所有属性进行监听，如有变动可拿到最新值并通知订阅者，内部采用Object.defineProperty的getter和setter来实现。</p>
+</li>
+<li><p>Compile 指令解析器，它的作用对每个元素节点的指令进行扫描和解析，根据指令模板替换数据，以及绑定相应的更新函数。</p>
+</li>
+<li>Watcher 订阅者， 作为连接 Observer 和 Compile 的桥梁，能够订阅并收到每个属性变动的通知，执行指令绑定的相应回调函数。</li>
+<li>Dep 消息订阅器，内部维护了一个数组，用来收集订阅者（Watcher），数据变动触发notify 函数，再调用订阅者的 update 方法。</li>
+</ul>
+<h4 id="当执行-new-Vue-时，Vue-就进入了初始化阶段，一方面Vue-会遍历-data-选项中的属性，并用-Object-defineProperty-将它们转为-getter-setter，实现数据变化监听功能；另一方面，Vue-的指令编译器Compile-对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher-来更新视图，-此时Wather-会将自己添加到消息订阅器中-Dep-初始化完毕。"><a href="#当执行-new-Vue-时，Vue-就进入了初始化阶段，一方面Vue-会遍历-data-选项中的属性，并用-Object-defineProperty-将它们转为-getter-setter，实现数据变化监听功能；另一方面，Vue-的指令编译器Compile-对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher-来更新视图，-此时Wather-会将自己添加到消息订阅器中-Dep-初始化完毕。" class="headerlink" title="当执行 new Vue() 时，Vue 就进入了初始化阶段，一方面Vue 会遍历 data 选项中的属性，并用 Object.defineProperty 将它们转为 getter/setter，实现数据变化监听功能；另一方面，Vue 的指令编译器Compile 对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher 来更新视图， 此时Wather 会将自己添加到消息订阅器中(Dep),初始化完毕。"></a>当执行 new Vue() 时，Vue 就进入了初始化阶段，一方面Vue 会遍历 data 选项中的属性，并用 Object.defineProperty 将它们转为 getter/setter，实现数据变化监听功能；另一方面，Vue 的指令编译器Compile 对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher 来更新视图， 此时Wather 会将自己添加到消息订阅器中(Dep),初始化完毕。</h4><p>当数据发生变化时，Observer 中的 setter 方法被触发，setter 会立即调用Dep.notify()，Dep 开始遍历所有的订阅者，并调用订阅者的 update 方法，订阅者收到通知后对视图进行相应的更新。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/19/js里常见的一些遍历方法/" rel="prev" title="js里常见的一些遍历方法">
+                js里常见的一些遍历方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/WechatIMG1.jpeg"
+               alt="lou" />
+          <p class="site-author-name" itemprop="name">lou</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVVM-设计模式"><span class="nav-number">1.</span> <span class="nav-text">MVVM 设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端-这里只讨论前端-技术不断发展衍生出来的，这里我们这种介绍mvvm。"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">相信学习编程的同学一定听过MVC，MVP，MVVM等这样的一些词，其实它就是一种编程的设计模式，这些模式也是随着前端(这里只讨论前端)技术不断发展衍生出来的，这里我们这种介绍mvvm。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MVVM-是Model-View-ViewModel的缩写-是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">MVVM 是Model-View-ViewModel的缩写,是流行于前端开发的一种架构模式，它的核心是提供了view和viewModel的双向绑定，view层的数据是有viewModel提供的，两者双向绑定，改变viewModel，view视图发生变化，网页手动改变视图view，viewModel发生变化，即所谓的数据双向绑定。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM-也就是viewModel-viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">vue.js是MVVM模式中比较有吗的js框架了，它专注view层，核心是MVVM的VM,也就是viewModel,viewModel负责连接view和model，保证了视图和数据的一致性，这种轻量级的架构让前端开发变得更加高效便捷.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1、为什么会出现MVVM"><span class="nav-number">1.1.1.</span> <span class="nav-text">1、为什么会出现MVVM?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#其实MVVM的兴起也正是不久前的15年，也正是vue-js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">其实MVVM的兴起也正是不久前的15年，也正是vue.js刚出来的时候。在这之前，一个设计模式霸占着设计模式许久，没错那就是MVC，我最早听说的也是MVC，java中经典的SSH框架就用的MVC来构建的。之前有写过php，用的是php的YII2框架，它采用的也是MVC构建的前后端结合的项目。MVC即Model-View-Controller，就是模型-视图-控制器。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的瘦客户端思想。"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">在HTML5还未火的那些年，mvc作为前端的最佳实践是ok的，这是因为当时view层还相对来说比较简单，前端需要的数据基本由后端处理好，View层主要获取到进行展示就行了。那时候提倡的是Controller来处理复杂的业务逻辑，所以View层相对来说就比较轻量，就是所谓的瘦客户端思想。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-前端为何要工程化，用使用MVC？"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.前端为何要工程化，用使用MVC？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App-既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化："><span class="nav-number">1.1.2.1.</span> <span class="nav-text">相对HTML4，HTML5最大的亮点就是它为移动设备提供了一些非常有用的功能，使得HTML5具备了开发App的能力，HTML5开发App最大的好处就是跨平台，快速迭代和上线，节省人力成本和提高效率，因此很多的企业开始对传统的App进行改造，逐渐用H5代替Native，到15年的时候，市面上大多数App或多或少都嵌入了H5的页面或者讲H5打包陈App.既然要用H5来构建App，那View层要做的事情就不仅仅是数据展示这么简单了，不仅要管理复杂的数据状态，还要处理移动设备的各种操作行为，前端也需要工程化，需要一个类似MVC的框架来管理这些复杂的逻辑，使开发更加高效，这里的MVC稍微发生了点变化：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点："><span class="nav-number">1.1.2.2.</span> <span class="nav-text">这种MVC架构模式对于简单的应用来说还ok，也符合软件架构的思想。但实际上，随着H5不断发展，人们更希望用H5开发的应用都能和native媲美，或者接近原生App的体验效果，于是前端应用的复杂程度不同往日，今天的前端暴露了三个痛点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">其实，早期jQuery的出现就是为了前端更能简洁地操作DOM而设计的，但它再解决了第一个问题，另外两个问题始终伴随这前端。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MVVM-的出现，完美解决以上三个问题"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.MVVM 的出现，完美解决以上三个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">MMVVM室友Model，View，ViewModel三部分组成，Model层代表数据模型，可以在Model中定义数据修改和操作的业务逻辑；View代表UI组件，他负责将数据模型转化成UI展现出来，ViewModel是一个同步View和Model的对象。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">在MVVM架构下，View和Model没有直接的联系，二十通过ViewModel进行交互，Model和ViewModel之间的交互是双向的，因此View数据的变化会同步到Model中，而Model数据的变化也会立即反应到View上。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有-由MVVM来统一管理。"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">ViewModel通过双向数据绑定把View层和Model层连接起来，二View和Model之间的同步工作完全是自动的，无需人为干涉，因此开发者只需关注逻辑，不需要手动操作DOM，不需要关注数据状态的同步问题，复杂的数据状态维护完全有 由MVVM来统一管理。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Vue-js的细节"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.Vue.js的细节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vue-js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">Vue.js可以说是MVVM架构的最佳实践，专注MVVM中的ViewModel，不仅做到了数据双向绑定，而且也是一筐相对轻量级的js库，api简介，容易上手。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vue-js是采用Object-defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object-defineProperty将它们转化为getter-setter。用户看不到getter-setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">Vue.js是采用Object.defineProperty的getter和setter，并结合观察这模式来实现数据绑定。当把一个普通Javascript对象传给Vue实例来作为data选项时，Vue将遍历它的属性，用Object.defineProperty将它们转化为getter/setter。用户看不到getter/setter，但是再内部它们让Vue追踪追踪依赖，在属性被访问和修改是通知变化。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当执行-new-Vue-时，Vue-就进入了初始化阶段，一方面Vue-会遍历-data-选项中的属性，并用-Object-defineProperty-将它们转为-getter-setter，实现数据变化监听功能；另一方面，Vue-的指令编译器Compile-对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher-来更新视图，-此时Wather-会将自己添加到消息订阅器中-Dep-初始化完毕。"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">当执行 new Vue() 时，Vue 就进入了初始化阶段，一方面Vue 会遍历 data 选项中的属性，并用 Object.defineProperty 将它们转为 getter/setter，实现数据变化监听功能；另一方面，Vue 的指令编译器Compile 对元素节点的指令进行扫描和解析，初始化视图，并订阅Watcher 来更新视图， 此时Wather 会将自己添加到消息订阅器中(Dep),初始化完毕。</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
