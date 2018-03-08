@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="dds">
+<meta name="description" content="浅谈事件轮询中的task与microtask前言想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。我们先看下面这个代码 console.log(&amp;apos;script start&amp;apos;); setTimeout(function(){    console.log(&amp;apos;setTimeout&amp;apos;);    },0); Promise.r">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="codelou's Blog">
+<meta property="og:title" content="浅谈事件轮询中的task与microtask">
 <meta property="og:url" content="http://yoursite.com/2017/04/14/test/index.html">
 <meta property="og:site_name" content="codelou's Blog">
-<meta property="og:description" content="dds">
-<meta property="og:updated_time" content="2017-04-14T01:11:06.000Z">
+<meta property="og:description" content="浅谈事件轮询中的task与microtask前言想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。我们先看下面这个代码 console.log(&amp;apos;script start&amp;apos;); setTimeout(function(){    console.log(&amp;apos;setTimeout&amp;apos;);    },0); Promise.r">
+<meta property="og:updated_time" content="2018-03-08T03:40:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="codelou's Blog">
-<meta name="twitter:description" content="dds">
+<meta name="twitter:title" content="浅谈事件轮询中的task与microtask">
+<meta name="twitter:description" content="浅谈事件轮询中的task与microtask前言想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。我们先看下面这个代码 console.log(&amp;apos;script start&amp;apos;); setTimeout(function(){    console.log(&amp;apos;setTimeout&amp;apos;);    },0); Promise.r">
 
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <title>  | codelou's Blog </title>
+  <title> 浅谈事件轮询中的task与microtask | codelou's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +281,7 @@
             
             
               
-                
+                浅谈事件轮询中的task与microtask
               
             
           </h1>
@@ -332,8 +332,20 @@
       
 
       
-        <p>dds</p>
-
+        <h1 id="浅谈事件轮询中的task与microtask"><a href="#浅谈事件轮询中的task与microtask" class="headerlink" title="浅谈事件轮询中的task与microtask"></a>浅谈事件轮询中的task与microtask</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h4 id="想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。"><a href="#想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。" class="headerlink" title="想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。"></a>想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。</h4><h6 id="我们先看下面这个代码"><a href="#我们先看下面这个代码" class="headerlink" title="我们先看下面这个代码"></a>我们先看下面这个代码</h6><hr>
+<pre><code>console.log(&apos;script start&apos;);
+setTimeout(function(){
+   console.log(&apos;setTimeout&apos;);   
+},0);
+Promise.resolve().then(function(){
+  console.log(&apos;promise1&apos;);
+}).then(function(){
+  console.log(&apos;promise2&apos;);
+});
+console.log(&apos;script end&apos;);
+</code></pre><hr>
+<p>这个代码的打印顺序是什么呢？<br>正确的结果是：script start,script end,promise1,promise2,   setTimeout,不同的浏览器可能会有差异。<br> 首先先要理解：<br>    1.每一个‘线程‘都有它独立的时间轮询，所以每个页面都可以各自工作，执行它们自己的代码。所有一个来源的窗口都共享同一个时间轮询，彼此之间同步交流信息。事件轮询不断运转执行所有的任务队列。一个事件轮询中的任务可能来源于多个地方，需要保证 所有任务按正确的顺序执行并不简单，但是浏览器会帮忙选择如何执行这些任务。这样一来，浏览器可以对一些影响性能的操作（如用户输入）做特殊处理。<br>    2.tasks已经被提前排好序，保证了浏览器可以持续从内部取出它们并弄到JS/DOM中执行。在两个任务的执行空隙，浏览器可能会重新渲染视图。在解析HTML页面的时候，鼠标点击事件与对应对调函数会产生一个新的task，同时会产生事件序列的还有上面的例子：setTimeout。<br>    setTimeout会延迟指定的时间，然后将回调函数加入任务序列中。这就是为什么setTimeout会在script end后面打印。script end的打印属于第一个任务序列的一部分，而setTimeout则在下一个任务序列中被打印。<br>    3.Microtask通常在js当前主任务执行完后直接执行，比如说对一些特殊事件作出响应，或者在不影响主线程情况下异步执行某些事件。一旦没有其他js代码在执行中，microtask队列会立即执行，执行过程中如果有microtask插入，也会同时被执行。microtask包括mutation observer回调，与上面例子中的promise回调。<br>    一旦一个Promise被决议，在决议就会形成一个microtask来响应回调函数。这个可以保证promise的即使被决议，回调函数也会被异步执行。因此，调用then（rel，rej）方法后会立即生成一个microtask队列。这也就是为什么promise1和promise2在script end后面打印，microtask必须在当前js代码运转完后才被操作。promise1和promise2在setTimeout之前打印，也就是microtask永远在下一个task之前执行。</p>
+<h4 id="总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。"><a href="#总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。" class="headerlink" title="总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。"></a>总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。</h4>
       
     </div>
 
@@ -369,8 +381,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/04/呵呵/" rel="next" title="呵呵">
-                <i class="fa fa-chevron-left"></i> 呵呵
+              <a href="/2017/05/21/hexo+github博客搭建/" rel="next" title="hexo+github博客搭建">
+                <i class="fa fa-chevron-left"></i> hexo+github博客搭建
               </a>
             
           </div>
@@ -424,8 +436,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/WechatIMG1.jpeg"
@@ -440,7 +461,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -470,6 +491,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅谈事件轮询中的task与microtask"><span class="nav-number">1.</span> <span class="nav-text">浅谈事件轮询中的task与microtask</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">想必大家对js的执行有很多不明白和困惑，今天我上网查了些许资料并根据自己的理解做一个总结。</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#我们先看下面这个代码"><span class="nav-number">1.1.0.1.0.1.</span> <span class="nav-text">我们先看下面这个代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">总结：所以，按我的理解，每个线程都有自己独立的时间轮询，轮询哪些代码是接下来该执行的，在这个线程里会有主代码和任务队列，主代码会立即执行，任务队列后执行，而任务队列又分为task和microtask，microtask通常在js当前主任务执行完后直接执行，也就是说一旦主代码没有内容了，microtask队列会立即执行。而task就会屁颠屁颠地跟在microtask后面。。。</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -486,7 +523,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

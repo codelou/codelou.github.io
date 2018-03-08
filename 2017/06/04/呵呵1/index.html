@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端爱好者" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="lettcode算法小记前言：今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。解法1： var arr = [4,3,2,7,8,2,3,1]; var newarr = []; for(var i=0;i&amp;lt;arr.leng">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lettcode 算法小记">
+<meta property="og:url" content="http://yoursite.com/2017/06/04/呵呵1/index.html">
+<meta property="og:site_name" content="codelou's Blog">
+<meta property="og:description" content="lettcode算法小记前言：今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。解法1： var arr = [4,3,2,7,8,2,3,1]; var newarr = []; for(var i=0;i&amp;lt;arr.leng">
+<meta property="og:updated_time" content="2018-03-08T06:47:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lettcode 算法小记">
+<meta name="twitter:description" content="lettcode算法小记前言：今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。解法1： var arr = [4,3,2,7,8,2,3,1]; var newarr = []; for(var i=0;i&amp;lt;arr.leng">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/04/呵呵1/"/>
+
+
+
+
+
+  <title> lettcode 算法小记 | codelou's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?84b858f0da9ee8b6361ba81d4a50ad7a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">codelou's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/04/呵呵1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="codelou's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                lettcode 算法小记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-04T15:27:17+08:00">
+                2017-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="lettcode算法小记"><a href="#lettcode算法小记" class="headerlink" title="lettcode算法小记"></a>lettcode算法小记</h1><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><h4 id="今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。"><a href="#今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。" class="headerlink" title="今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。"></a>今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。</h4><h3 id="1-找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。"><a href="#1-找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。" class="headerlink" title="1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。"></a>1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。</h3><h4 id="解法1："><a href="#解法1：" class="headerlink" title="解法1："></a>解法1：</h4><hr>
+<pre><code>var arr = [4,3,2,7,8,2,3,1];
+var newarr = [];
+for(var i=0;i&lt;arr.length;i++){
+ arr.sort().sort(function(a,b){
+   if(a===b&amp;&amp;newarr.indexOf(a)===-1){
+       newarr.push(a)
+   }
+ })
+}
+console,log(newarr)
+</code></pre><hr>
+<h4 id="解法2："><a href="#解法2：" class="headerlink" title="解法2："></a>解法2：</h4><hr>
+<pre><code>var arr = [9,9,11,,2,3,4,5,6,77,7];
+//用slice构建一个新数组
+var sorted_arr = arr.slice().sort();
+var results = [];
+for(var i = 0;i&lt; arr.length-1;i++){
+  if(sorted_arr[i+1] == sorted_arr[i]){
+    results.push(sorted_arr[i]); 
+  } 
+} 
+console.log(results);
+</code></pre><hr>
+<h3 id="2-找出不重复的数字（不是去重）"><a href="#2-找出不重复的数字（不是去重）" class="headerlink" title="2.找出不重复的数字（不是去重）"></a>2.找出不重复的数字（不是去重）</h3><hr>
+<pre><code>var arr = [4,3,2,7,8,2,3,1];
+var newarr = [];
+//先把原来数组正序排序
+var orderArr = arr.sort(function(a,b){
+  return a-b; 
+})
+for(var i=0;i&lt;orderArr.length;i++){
+ if(orderArr[i]===orderArr[i+1]){
+   i+=1;
+ }else{
+   newarr.push(orderArr[i]) 
+ }
+}
+console.log(newarr)
+</code></pre><hr>
+<h3 id="3-找出数组中连续出现的数字的个数"><a href="#3-找出数组中连续出现的数字的个数" class="headerlink" title="3.找出数组中连续出现的数字的个数"></a>3.找出数组中连续出现的数字的个数</h3><p>正则形式：</p>
+<hr>
+<pre><code>var temp = {};
+&apos;abcdaabc&apos;.replace(/(\w{1})/g,function($1){
+  temp[$1]?temp[$1]+=1:temp[$1] = 1;
+ })
+console.log(temp)//{a:3,b:2,c:2,d:1}
+//ES6形式：灵活运用了ES6，简洁爽快
+var arr = &apos;abcdaabc&apos;;
+var info = arr
+   .split(&apos;&apos;)
+   .reduce((p,k) =&gt; (p[k]++ || (p[k] =1),p),{});
+console.log(info); //{a:3,b:2,c:2,d:1}
+</code></pre><hr>
+<h3 id="4-找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大-排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字-。"><a href="#4-找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大-排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字-。" class="headerlink" title="4.找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大  排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字 。"></a>4.找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大  排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字 。</h3><hr>
+<pre><code>var findDisappearedNumbers = function(nums){
+  nums=Array.from(new Set(nums)).sort()
+  console.log(nums)
+  var newarr = [];
+  nums.sort(function(a,b){
+   if(b-a!=1){
+    for(var i=1;i&lt;b-a;i++){
+     newarr.push(a+i)
+    }
+     console.log(&apos;a&apos;,newarr)
+   } 
+  }) 
+}
+findDisappearedNumbers([4,3,2,7,8,2,3,1])
+</code></pre><hr>
+<h3 id="5-给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。"><a href="#5-给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。" class="headerlink" title="5.给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。"></a>5.给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。</h3><p>比如：<br>给定nums = [2,7,11,15],target = 9<br>由于nums[0] + nums[1] = 9<br>所以返回[0,1]</p>
+<hr>
+<pre><code>function twoIndex(nums,target){
+ var tmp = {};
+ for(var i = 0;i&lt;nums.length;i++){
+  var num = nums[i];
+  if(tmp[num]!==undefined){
+   return [tmp[num],i]
+  }else{
+   tmp[target-num]=i;
+  }
+ }
+}
+twoIndex([2,7],9)
+</code></pre><hr>
+<h3 id="6-找出-一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。"><a href="#6-找出-一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。" class="headerlink" title="6.找出 一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。"></a>6.找出 一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。</h3><p> 比如：<br> 给定abcabcbb，最长的子串，那么输出结果为3；<br> 给定bbbbb，最长的子串是b，输出结果为1；<br> 给定pwwkew，最长的子串为wke，输出3.</p>
+<hr>
+<pre><code>function longestUniqueSubstr(str){
+ str = String(str);
+ var index = {}//存储索引
+ var tenLen = 0//暂存结果
+ var resLen = 0//最终结果
+ for(let i = 0;i&lt;str.length;i+=1){
+  //取出索引值，如果有的话
+  let ic =index[str[i]]
+  if(typeof ic !== &apos;undefined&apos;){
+   //这里是关键部分
+   if(tenLen &gt; resLen){
+    resLen = tenLen;
+   }
+   i = ic+1
+   index = {}
+   tenLen = 0
+  }
+  index[str[i]] = i;
+  tenLen += 1
+ } 
+ return Math.max(tenlen,renLen)
+}         
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/10/bat前端面试题/" rel="next" title="bat前端面试题">
+                <i class="fa fa-chevron-left"></i> bat前端面试题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/21/hexo+github博客搭建/" rel="prev" title="hexo+github博客搭建">
+                hexo+github博客搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/WechatIMG1.jpeg"
+               alt="lou" />
+          <p class="site-author-name" itemprop="name">lou</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lettcode算法小记"><span class="nav-number">1.</span> <span class="nav-text">lettcode算法小记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言："><span class="nav-number">1.1.</span> <span class="nav-text">前言：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">今天看到好友的博客里有一些lettcode算法的题目，看着觉得不错就来拷贝一波，想要提高自己算法能力的同学可以来参考参考。。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.找出重复的元素：这个思想就是先对数组进行一次排序，然后两两进行比较，然后借可以确定下来了。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解法1："><span class="nav-number">1.1.1.1.</span> <span class="nav-text">解法1：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解法2："><span class="nav-number">1.1.1.2.</span> <span class="nav-text">解法2：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-找出不重复的数字（不是去重）"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.找出不重复的数字（不是去重）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-找出数组中连续出现的数字的个数"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.找出数组中连续出现的数字的个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大-排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字-。"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.找出一串连续数字中没有出现的数字：这个题目就是先进行去重然后从小到大  排序，然后两两相差不为1，重新建一个循环，就可以找出中间断掉的数字 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.给定一个整数数组，其中有两项之和为一个特定的数字，不允许两次使用同一个元素，返回这两个数的索引。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-找出-一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.找出 一个字符串中最长的联系子串，输出这个子串的长度，要求：这个子串中没有重复的字符。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lou</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
